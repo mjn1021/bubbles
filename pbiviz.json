@@ -1,0 +1,25 @@
+{
+    "visual": {
+        "name": "bubbles",
+        "displayName": "Bubbles",
+        "guid": "bubblesEA833123585649B0BE206883FD5129F7",
+        "visualClassName": "Visual",
+        "version": "1.0.0",
+        "description": "This is a custom visual test",
+        "supportUrl": "https://github.com/mjn1021/pbiviz-demo",
+        "gitHubUrl": ""
+    },
+    "apiVersion": "3.8.0",
+    "author": {
+        "name": "Matt Nawrocki",
+        "email": "matt.nawrocki@slalom.com"
+    },
+    "assets": {
+        "icon": "assets/bubble.png"
+    },
+    "externalJS": null,
+    "style": "style/visual.less",
+    "capabilities": "capabilities.json",
+    "dependencies": null,
+    "stringResources": []
+}
