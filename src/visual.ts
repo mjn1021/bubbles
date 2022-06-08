@@ -30,6 +30,10 @@ import powerbi from "powerbi-visuals-api";
 import VisualConstructorOptions = powerbi.extensibility.visual.VisualConstructorOptions;
 import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
 import IVisual = powerbi.extensibility.visual.IVisual;
+import DataView = powerbi.DataView;
+import { VisualSettings } from "./settings";
+import VisualObjectInstanceEnumeration = powerbi.VisualObjectInstanceEnumeration;
+import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInstancesOptions;
 
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -41,6 +45,8 @@ export class Visual implements IVisual {
     // private app: React.ComponentElement<any, any>;     // See NOTES.md
     private app: React.FunctionComponentElement<any>;     // See NOTES.md
 
+    private visualSettings: VisualSettings;
+
     constructor(options: VisualConstructorOptions) {
         this.target = options.element;
         this.app = React.createElement(App, {
@@ -49,13 +55,25 @@ export class Visual implements IVisual {
 
         ReactDOM.render(this.app, this.target);
     }
+
+    public enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration {
+        const settings: VisualSettings = this.visualSettings || <VisualSettings>VisualSettings.getDefault();
+        
+        return VisualSettings.enumerateObjectInstances(settings, options);
+    }
     
     /**
      * The "effect" function of the Visual experiencing an update
      * @param options VisualUpdateOptions
      */
     public update(options: VisualUpdateOptions) {
-        App.update(options);     // Instance-override will occur on Component mount and stil allows for multiple instances of the IVisual without issue
+        let dataView: DataView = options.dataViews[ 0 ];
+        this.visualSettings = VisualSettings.parse<VisualSettings>(dataView);
+
+        this.visualSettings.bubbles.largeBubbleCount = Math.max(0, this.visualSettings.bubbles.largeBubbleCount);
+        this.visualSettings.bubbles.smallBubbleCount = Math.max(0, this.visualSettings.bubbles.smallBubbleCount);
+
+        App.update(options, this.visualSettings);     // Instance-override will occur on Component mount and stil allows for multiple instances of the IVisual without issue
     }
 
     /**

@@ -12,47 +12,21 @@
         }
     ],
     "objects": {
-        "dataPoint": {
-            "displayName": "Data colors",
+        "bubbles": {
+            "displayName": "Bubbles",
             "properties": {
-                "defaultColor": {
-                    "displayName": "Default color",
+                "largeBubbleCount": {
+                    "displayName": "Large Bubbles",
+                    "description": "The number of large bubbles to render.",
                     "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
+                        "numeric": true
                     }
                 },
-                "showAllDataPoints": {
-                    "displayName": "Show all",
+                "smallBubbleCount": {
+                    "displayName": "Small Bubbles",
+                    "description": "The number of small bubbles to render.",
                     "type": {
-                        "bool": true
-                    }
-                },
-                "fill": {
-                    "displayName": "Fill",
-                    "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
-                    }
-                },
-                "fillRule": {
-                    "displayName": "Color saturation",
-                    "type": {
-                        "fill": {}
-                    }
-                },
-                "fontSize": {
-                    "displayName": "Text Size",
-                    "type": {
-                        "formatting": {
-                            "fontSize": true
-                        }
+                        "numeric": true
                     }
                 }
             }

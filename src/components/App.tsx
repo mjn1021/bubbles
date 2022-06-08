@@ -17,8 +17,11 @@ export function App({ callback, state = {}, ...props }: any = {}) {
      * This mounting assignment is necessary to bind the state-Context appropriately and allow for .update to be invoked by the IVisual.update function
      */
     useEffect(() => {
-        App.update = (opts: any): any => {
-            setOptions(opts);
+        App.update = (opts: any, viz: any): any => {
+            setOptions({
+                options: opts,
+                visualSettings: viz,
+            });
         };
 
         /**

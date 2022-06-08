@@ -29,20 +29,14 @@
 import { dataViewObjectsParser } from "powerbi-visuals-utils-dataviewutils";
 import DataViewObjectsParser = dataViewObjectsParser.DataViewObjectsParser;
 
+export class BubbleSettings {
+  public largeBubbleCount: number = 10;
+  public largeBubbleRadius: number = 25;
+  public largeBubbleSpeed: number = 150;
+  public smallBubbleCount: number = 10;
+  public smallBubbleRadius: number = 5;
+  public smallBubbleSpeed: number = 150;
+}
 export class VisualSettings extends DataViewObjectsParser {
-  public dataPoint: dataPointSettings = new dataPointSettings();
+  public bubbles: BubbleSettings = new BubbleSettings();
 }
-
-export class dataPointSettings {
-  // Default color
-  public defaultColor: string = "";
-  // Show all
-  public showAllDataPoints: boolean = true;
-  // Fill
-  public fill: string = "";
-  // Color saturation
-  public fillRule: string = "";
-  // Text Size
-  public fontSize: number = 12;
-}
-

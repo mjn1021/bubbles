@@ -262,6 +262,7 @@ export class Circle extends Shape {
 }
 
 export function Scene() {
+    //TODO TypeScript is failing to recognize the { options, visualSettings } on @context -- add definition mappings
     const context = useContext(OptionsContext);
     const [ canvas, setCanvas ] = useState(document.createElement("canvas"));
     const [ shapes, setShapes ] = useState([]);
@@ -271,10 +272,14 @@ export function Scene() {
     useEffect(() => {
         setCanvasSize(canvas);
 
+        //NOTE  See TODO above
+        const largeBubbleCount = context[ "visualSettings" ] ? context[ "visualSettings" ].bubbles.largeBubbleCount : 10;
+        const smallBubbleCount = context[ "visualSettings" ] ? context[ "visualSettings" ].bubbles.smallBubbleCount : 10;
+
         const circles = [];
         const magnitude = 150;
         const speed = [ -magnitude, magnitude ];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < largeBubbleCount; i++) {
             const circle: Circle = new Circle(
                 [
                     rand(0 + size * 2, canvas.width - size * 2),
@@ -289,7 +294,7 @@ export function Scene() {
 
             circles.push(circle);
         }
-        for (let i = 0; i < 500; i++) {
+        for (let i = 0; i < smallBubbleCount; i++) {
             const circle: Circle = new Circle(
                 [
                     rand(0 + size * 2, canvas.width - size * 2),
@@ -306,9 +311,6 @@ export function Scene() {
         }
 
         setShapes(circles);
-    }, []);
-    useEffect(() => {
-        setCanvasSize(canvas);
     }, [ canvas, context ]);
 
     function clearCanvas(ctx) {
