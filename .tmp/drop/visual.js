@@ -29,6 +29,10 @@ var __rest = (undefined && undefined.__rest) || function (s, e) {
 
 const OptionsContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext({});
 const StateContext = react__WEBPACK_IMPORTED_MODULE_0__.createContext({});
+/**
+ * At the time of experimentation, `useState` did not work, but `useReducer` did.
+ * As such, create a trivial reducer that mimics `useState`.
+ */
 function optionsReducer(current, next) {
     return next;
 }
@@ -478,6 +482,12 @@ function Scene() {
 
 
 var DataViewObjectsParser = powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MODULE_0__/* .DataViewObjectsParser */ .U;
+/**
+ * This is basically where you actually declare all of the potential settings
+ * that you might like to utilize.  As you can see, there are more options here
+ * than are present in the visual -- this only initializes them, you must still
+ * add them to the context.
+ */
 class BubbleSettings {
     constructor() {
         this.largeBubbleCount = 10;
@@ -488,6 +498,9 @@ class BubbleSettings {
         this.smallBubbleSpeed = 150;
     }
 }
+/**
+ * Establish the above settings as the main settings.
+ */
 class VisualSettings extends DataViewObjectsParser {
     constructor() {
         super(...arguments);
@@ -540,6 +553,10 @@ class VisualSettings extends DataViewObjectsParser {
 
 
 class Visual {
+    /**
+     * Initialize the React act similarly to CRA's `index.js` bootstraping
+     * Here `this.target` is the typical `#root`
+     */
     constructor(options) {
         this.target = options.element;
         this.app = react__WEBPACK_IMPORTED_MODULE_1__.createElement(_components_App__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .ZP, {
@@ -552,15 +569,27 @@ class Visual {
         return _settings__WEBPACK_IMPORTED_MODULE_0__/* .VisualSettings.enumerateObjectInstances */ .m.enumerateObjectInstances(settings, options);
     }
     /**
-     * The "effect" function of the Visual experiencing an update
-     * @param options VisualUpdateOptions
+     * This is triggered by any update that the visual has.
      */
     update(options) {
+        /**
+         * This is the actual data in the visual
+         */
         let dataView = options.dataViews[0];
+        /**
+         * Read and (re)assign any modified options.  This appears to trigger automatically
+         * whenever you invoke a settings change in the visual (e.g. enter a value and press "Enter")
+         */
         this.visualSettings = _settings__WEBPACK_IMPORTED_MODULE_0__/* .VisualSettings.parse */ .m.parse(dataView);
         this.visualSettings.bubbles.largeBubbleCount = Math.max(0, this.visualSettings.bubbles.largeBubbleCount);
         this.visualSettings.bubbles.smallBubbleCount = Math.max(0, this.visualSettings.bubbles.smallBubbleCount);
-        _components_App__WEBPACK_IMPORTED_MODULE_3__/* ["default"].update */ .ZP.update(options, this.visualSettings); // Instance-override will occur on Component mount and stil allows for multiple instances of the IVisual without issue
+        /**
+         * Create a static binding to an update hook on the React side.  This allows the PBI
+         * data to flow into the React context.
+         *
+         * NOTE: Instance-overrides will occur on Component mount and stil allows for multiple instances of the IVisual without issue.
+         */
+        _components_App__WEBPACK_IMPORTED_MODULE_3__/* ["default"].update */ .ZP.update(options, this.visualSettings);
     }
     /**
      * Allow for React components to invoke a callback to the IVisual (e.g. message bus)

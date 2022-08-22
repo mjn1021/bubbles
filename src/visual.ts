@@ -42,11 +42,22 @@ import App from "./components/App";
 
 export class Visual implements IVisual {
     private target: HTMLElement;
-    // private app: React.ComponentElement<any, any>;     // See NOTES.md
-    private app: React.FunctionComponentElement<any>;     // See NOTES.md
 
+    /**
+     * This is the main React app
+     */
+    private app: React.FunctionComponentElement<any>;   // Use this with React Hooks (i.e. functional components)
+    // private app: React.ComponentElement<any, any>;   // Use this with React Classes (i.e. class components)
+
+    /**
+     * This is the main configuration object (i.e. "Format your visual" settings)
+     */
     private visualSettings: VisualSettings;
 
+    /**
+     * Initialize the React act similarly to CRA's `index.js` bootstraping
+     * Here `this.target` is the typical `#root`
+     */
     constructor(options: VisualConstructorOptions) {
         this.target = options.element;
         this.app = React.createElement(App, {
@@ -63,17 +74,30 @@ export class Visual implements IVisual {
     }
     
     /**
-     * The "effect" function of the Visual experiencing an update
-     * @param options VisualUpdateOptions
+     * This is triggered by any update that the visual has.
      */
     public update(options: VisualUpdateOptions) {
+        /**
+         * This is the actual data in the visual
+         */
         let dataView: DataView = options.dataViews[ 0 ];
+
+        /**
+         * Read and (re)assign any modified options.  This appears to trigger automatically
+         * whenever you invoke a settings change in the visual (e.g. enter a value and press "Enter")
+         */
         this.visualSettings = VisualSettings.parse<VisualSettings>(dataView);
 
         this.visualSettings.bubbles.largeBubbleCount = Math.max(0, this.visualSettings.bubbles.largeBubbleCount);
         this.visualSettings.bubbles.smallBubbleCount = Math.max(0, this.visualSettings.bubbles.smallBubbleCount);
 
-        App.update(options, this.visualSettings);     // Instance-override will occur on Component mount and stil allows for multiple instances of the IVisual without issue
+        /**
+         * Create a static binding to an update hook on the React side.  This allows the PBI
+         * data to flow into the React context.
+         * 
+         * NOTE: Instance-overrides will occur on Component mount and stil allows for multiple instances of the IVisual without issue.
+         */
+        App.update(options, this.visualSettings);
     }
 
     /**

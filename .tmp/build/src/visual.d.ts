@@ -7,13 +7,22 @@ import VisualObjectInstanceEnumeration = powerbi.VisualObjectInstanceEnumeration
 import EnumerateVisualObjectInstancesOptions = powerbi.EnumerateVisualObjectInstancesOptions;
 export declare class Visual implements IVisual {
     private target;
+    /**
+     * This is the main React app
+     */
     private app;
+    /**
+     * This is the main configuration object (i.e. "Format your visual" settings)
+     */
     private visualSettings;
+    /**
+     * Initialize the React act similarly to CRA's `index.js` bootstraping
+     * Here `this.target` is the typical `#root`
+     */
     constructor(options: VisualConstructorOptions);
     enumerateObjectInstances(options: EnumerateVisualObjectInstancesOptions): VisualObjectInstanceEnumeration;
     /**
-     * The "effect" function of the Visual experiencing an update
-     * @param options VisualUpdateOptions
+     * This is triggered by any update that the visual has.
      */
     update(options: VisualUpdateOptions): void;
     /**

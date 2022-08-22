@@ -6,6 +6,10 @@ import Scene from "./Scene";
 export const OptionsContext = React.createContext({});
 export const StateContext = React.createContext({});
 
+/**
+ * At the time of experimentation, `useState` did not work, but `useReducer` did.
+ * As such, create a trivial reducer that mimics `useState`.
+ */
 function optionsReducer(current: any, next: any): any {
     return next;
 };
