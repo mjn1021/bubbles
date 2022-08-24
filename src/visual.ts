@@ -55,7 +55,7 @@ export class Visual implements IVisual {
     private visualSettings: VisualSettings;
 
     /**
-     * Initialize the React act similarly to CRA's `index.js` bootstraping
+     * Initialize the React similarly to CRA's `index.js` bootstraping
      * Here `this.target` is the typical `#root`
      */
     constructor(options: VisualConstructorOptions) {
@@ -83,8 +83,10 @@ export class Visual implements IVisual {
         let dataView: DataView = options.dataViews[ 0 ];
 
         /**
-         * Read and (re)assign any modified options.  This appears to trigger automatically
-         * whenever you invoke a settings change in the visual (e.g. enter a value and press "Enter")
+         * Read and (re)assign any modified options.  Changes appears to trigger automatically
+         * whenever you invoke a settings change in the visual (e.g. enter a value and press "Enter"),
+         * though in some cases the visual *may* need to have at least *some* data element attached to it
+         * in order to invoke the update.
          */
         this.visualSettings = VisualSettings.parse<VisualSettings>(dataView);
 
