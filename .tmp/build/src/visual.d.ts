@@ -16,7 +16,7 @@ export declare class Visual implements IVisual {
      */
     private visualSettings;
     /**
-     * Initialize the React act similarly to CRA's `index.js` bootstraping
+     * Initialize the React similarly to CRA's `index.js` bootstraping
      * Here `this.target` is the typical `#root`
      */
     constructor(options: VisualConstructorOptions);

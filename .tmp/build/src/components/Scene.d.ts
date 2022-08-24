@@ -1,4 +1,15 @@
 /// <reference types="react" />
+/**
+ * README:
+ *
+ * There's a lot to unpack here, but really just look at Scene
+ * at the bottom and work backward.  Basically everything else in
+ * this file is facilitating Scene's work.
+ *
+ * This particular scene renders a bunch of bubbles that will float around
+ * the visual, bouncing off of walls.  You can change the number of bubbles
+ * in Power BI itself, by changing the visual's settings there.
+ */
 export declare function rand(min?: number, max?: number): number;
 export declare function rgb(r?: any, g?: any, b?: any, a?: any): string;
 export declare function randRGB(): string;

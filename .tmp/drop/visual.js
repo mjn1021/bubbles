@@ -81,6 +81,10 @@ App.update = (...args) => void 0;
 /* provided dependency */ var window = __webpack_require__(738);
 
 
+/**
+ * A trivial state-reducer to compensate for the NOTE in
+ * Canvas below.
+ */
 function timeReducer(time, newTime) {
     const [prev2, prev] = time;
     if (prev === newTime) {
@@ -89,6 +93,15 @@ function timeReducer(time, newTime) {
     return [prev, newTime, (newTime - prev) / 1000];
 }
 ;
+/**
+ * This basically uses @master as the master canvas element and
+ * @onDraw and its main drawing function.  It is currently invoked
+ * by a time-state loop, invoked by the animation frame call.  There
+ * are better ways to handle this, but this is primarily a POC.
+ *
+ * NOTE: I've had mixed luck with `useState` actually invoking an update,
+ * but `useReducer` seems to work reliably.
+ */
 function Canvas({ master, onDraw, style } = {}) {
     const container = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
     const [canvas, setCanvas] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(master || document.createElement("canvas"));
@@ -110,6 +123,8 @@ function Canvas({ master, onDraw, style } = {}) {
     }, [container, master]);
     /**
      * Draw loop
+     * This is somewhat of a shim to facilitate the animation frame drawing,
+     * basically just forcing React to update this component per draw.
      */
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
         const [p, c, dt] = time;
@@ -118,6 +133,14 @@ function Canvas({ master, onDraw, style } = {}) {
     }, [time]);
     /**
      * Render graphics
+     * Using the effect hook with `setTime` forces the component
+     * to update, matching the draw.
+     *
+     * NOTE: It's not usually necessary to have a React component update to draw
+     * to the canvas, but those paradigms weren't working well in testing,
+     * thus this modified approach.  Something like PixiJS might be able
+     * to really overhaul this by leveraging GPU acceleration and its internal
+     * timers might resolve this.
      */
     function draw() {
         window.requestAnimationFrame((t) => {
@@ -151,6 +174,17 @@ function Canvas({ master, onDraw, style } = {}) {
 
 
 
+/**
+ * README:
+ *
+ * There's a lot to unpack here, but really just look at Scene
+ * at the bottom and work backward.  Basically everything else in
+ * this file is facilitating Scene's work.
+ *
+ * This particular scene renders a bunch of bubbles that will float around
+ * the visual, bouncing off of walls.  You can change the number of bubbles
+ * in Power BI itself, by changing the visual's settings there.
+ */
 function rand(min = 0, max = 100) {
     return ~~(Math.random() * max + min);
 }
@@ -554,7 +588,7 @@ class VisualSettings extends DataViewObjectsParser {
 
 class Visual {
     /**
-     * Initialize the React act similarly to CRA's `index.js` bootstraping
+     * Initialize the React similarly to CRA's `index.js` bootstraping
      * Here `this.target` is the typical `#root`
      */
     constructor(options) {
@@ -577,8 +611,10 @@ class Visual {
          */
         let dataView = options.dataViews[0];
         /**
-         * Read and (re)assign any modified options.  This appears to trigger automatically
-         * whenever you invoke a settings change in the visual (e.g. enter a value and press "Enter")
+         * Read and (re)assign any modified options.  Changes appears to trigger automatically
+         * whenever you invoke a settings change in the visual (e.g. enter a value and press "Enter"),
+         * though in some cases the visual *may* need to have at least *some* data element attached to it
+         * in order to invoke the update.
          */
         this.visualSettings = _settings__WEBPACK_IMPORTED_MODULE_0__/* .VisualSettings.parse */ .m.parse(dataView);
         this.visualSettings.bubbles.largeBubbleCount = Math.max(0, this.visualSettings.bubbles.largeBubbleCount);
