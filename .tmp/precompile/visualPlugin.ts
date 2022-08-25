@@ -5,8 +5,8 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 import DialogConstructorOptions = powerbiVisualsApi.extensibility.visual.DialogConstructorOptions;
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var bubblesEA833123585649B0BE206883FD5129F7_DEBUG: IVisualPlugin = {
-    name: 'bubblesEA833123585649B0BE206883FD5129F7_DEBUG',
+var bubblesEA833123585649B0BE206883FD5129F7: IVisualPlugin = {
+    name: 'bubblesEA833123585649B0BE206883FD5129F7',
     displayName: 'Bubbles',
     class: 'Visual',
     apiVersion: '3.8.0',
@@ -27,6 +27,6 @@ var bubblesEA833123585649B0BE206883FD5129F7_DEBUG: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["bubblesEA833123585649B0BE206883FD5129F7_DEBUG"] = bubblesEA833123585649B0BE206883FD5129F7_DEBUG;
+    powerbi.visuals.plugins["bubblesEA833123585649B0BE206883FD5129F7"] = bubblesEA833123585649B0BE206883FD5129F7;
 }
-export default bubblesEA833123585649B0BE206883FD5129F7_DEBUG;
+export default bubblesEA833123585649B0BE206883FD5129F7;
